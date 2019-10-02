@@ -1,0 +1,17 @@
+﻿{
+  "EdgeIoTGatewayMessageBusInfo": {},
+  "Name": "Output",
+  "DataSourceType": "Edge Hub",
+  "Serialization": {
+    "Encoding": "UTF8",
+    "Type": "Json",
+    "FieldDelimiter": null,
+    "Format": "Array",
+    "SerializationDllPath": null,
+    "SerializationClassName": null,
+    "SerializationDllPathInLocal": null
+  },
+  "MinimumRows": null,
+  "MaximumTime": null,
+  "ScriptType": "Output"
+}

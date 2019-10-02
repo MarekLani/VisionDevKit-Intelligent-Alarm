@@ -1,0 +1,47 @@
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>2593343e-2bd8-4522-8383-97fc3578cc15</ProjectGuid>
+    <OutputType>File</OutputType>
+    <AssemblyName>ASAEdgeApplication1</AssemblyName>
+    <StartFile>Script.asaql</StartFile>
+    <ASATargetsFilePath>$(AppData)\Microsoft\DataLake\MsBuild\1.0\StreamAnalytics.targets</ASATargetsFilePath>
+    <Name>ASAEdgeApplication1</Name>
+    <RootNamespace>ASAEdgeApplication1</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Script Include="Script.asaql" />
+    <ScriptCode Include="Script.asaql.cs">
+      <DependentUpon>Script.asaql</DependentUpon>
+    </ScriptCode>
+  </ItemGroup>
+  <ItemGroup>
+    <Configure Include="Inputs\Input.json">
+      <SubType>Input</SubType>
+    </Configure>
+    <Configure Include="Inputs\local_input.json">
+      <SubType>InputMock</SubType>
+    </Configure>
+    <Configure Include="Outputs\Output.json">
+      <SubType>Output</SubType>
+    </Configure>
+    <Configure Include="JobConfig.json">
+      <SubType>JobConfig</SubType>
+    </Configure>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Inputs" />
+    <Folder Include="Outputs" />
+    <Folder Include="Functions" />
+  </ItemGroup>
+  <Import Project="$(ASATargetsFilePath)" />
+</Project>

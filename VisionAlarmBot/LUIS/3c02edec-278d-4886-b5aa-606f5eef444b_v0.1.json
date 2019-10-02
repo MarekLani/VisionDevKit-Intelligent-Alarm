@@ -1,0 +1,195 @@
+{
+  "luis_schema_version": "4.0.0",
+  "versionId": "0.1",
+  "name": "IntelligenAlarmBot",
+  "desc": "",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "intents": [
+    {
+      "name": "LastEntry"
+    },
+    {
+      "name": "LastIdentifiedPersonEntered"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "PersonArrived"
+    },
+    {
+      "name": "ShowMeTodaysEntrants"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Location",
+      "roles": [],
+      "hierarchyChildren": []
+    },
+    {
+      "name": "Person",
+      "roles": [],
+      "hierarchyChildren": []
+    }
+  ],
+  "composites": [],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "give me last entry",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "i want to know when was the last entry",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "show me last time when karol entered?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 23,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "show me who entered last",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "the last time fero kovac entered?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 14,
+          "endPos": 23
+        }
+      ]
+    },
+    {
+      "text": "what is the name of a last entrant?",
+      "intent": "LastIdentifiedPersonEntered",
+      "entities": []
+    },
+    {
+      "text": "what was the time daska lani arrived home?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 18,
+          "endPos": 27
+        }
+      ]
+    },
+    {
+      "text": "when did lenka come home?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "when did marek arrived home?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "when did matus arrive ?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 9,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "when did peter kovac arrive?",
+      "intent": "PersonArrived",
+      "entities": [
+        {
+          "entity": "Person",
+          "startPos": 9,
+          "endPos": 19
+        }
+      ]
+    },
+    {
+      "text": "when was the building entred last?",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "when was the last entry?",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "when were the doors opened last?",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "who did entered last",
+      "intent": "LastEntry",
+      "entities": []
+    },
+    {
+      "text": "who entered home today?",
+      "intent": "ShowMeTodaysEntrants",
+      "entities": []
+    },
+    {
+      "text": "who entered last?",
+      "intent": "LastIdentifiedPersonEntered",
+      "entities": []
+    },
+    {
+      "text": "who was at home today?",
+      "intent": "ShowMeTodaysEntrants",
+      "entities": []
+    },
+    {
+      "text": "who was last person who visited us?",
+      "intent": "LastIdentifiedPersonEntered",
+      "entities": []
+    },
+    {
+      "text": "who was the last person who did come to our home?",
+      "intent": "LastIdentifiedPersonEntered",
+      "entities": []
+    },
+    {
+      "text": "who was the last person who entered?",
+      "intent": "LastIdentifiedPersonEntered",
+      "entities": []
+    }
+  ],
+  "settings": []
+}

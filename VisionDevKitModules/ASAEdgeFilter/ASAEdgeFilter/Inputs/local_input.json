@@ -1,0 +1,11 @@
+﻿{
+  "InputAlias": "input",
+  "Type": "Data Stream",
+  "Format": "Json",
+  "FilePath": "..\\..\\..\\input.json",
+  "SerializationDllPath": null,
+  "SerializationClassName": null,
+  "SerializationDllPathInLocal": null,
+  "Sample": "{\r\n  \"label\": \"person\",\r\n  \"confidence\": 78\r\n}",
+  "ScriptType": "InputMock"
+}

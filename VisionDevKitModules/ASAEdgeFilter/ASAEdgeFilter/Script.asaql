@@ -1,0 +1,8 @@
+﻿SELECT
+    label, confidence, System.TimeStamp as timestamp
+INTO
+    Output
+FROM
+    Input
+WHERE
+  ( IsFirst(second, 30) OVER (When label = 'person' AND confidence >= 60) = 1)

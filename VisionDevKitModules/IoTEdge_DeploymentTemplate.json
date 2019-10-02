@@ -1,0 +1,171 @@
+{
+    "modulesContent": {
+        "$edgeAgent": {
+            "properties.desired": {
+                "modules": {
+                    "AIVisionDevKitGetStartedModule": {
+                        "settings": {
+                            "image": "mcr.microsoft.com/aivision/visionsamplemodule:1.1.3-arm32v7",
+                            "createOptions": "{\"HostConfig\":{\"NetworkMode\":\"host\",\"Binds\":[\"/data/misc/camera:/app/vam_model_folder\",\"/run/systemd:/run/systemd\"]},\"NetworkingConfig\":{\"EndpointsConfig\":{\"host\":{}}}}"
+                        },
+                        "type": "docker",
+                        "version": "1.0",
+                        "status": "running",
+                        "restartPolicy": "always"
+                    },
+                    "WebStreamModule": {
+                        "settings": {
+                            "image": "mcr.microsoft.com/aivision/visionsamplemodule:webstream_0.0.13-arm32v7",
+                            "createOptions": "{\"ExposedPorts\":{\"3000/tcp\":{},\"3002/tcp\":{}},\"HostConfig\":{\"NetworkMode\":\"host\",\"PortBindings\":{\"3000/tcp\":[{\"HostPort\":\"3000\"}],\"3002/tcp\":[{\"HostPort\":\"3002\"}]}},\"NetworkingConfig\":{\"EndpointsConfig\":{\"host\":{}}}}"
+                        },
+                        "type": "docker",
+                        "version": "1.0",
+                        "env": {
+                            "RTSP_IP": {
+                                "value": "192.168.31.247  //provide stream IP adress"
+                            },
+                            "RTSP_PORT": {
+                                "value": "8900"
+                            },
+                            "RTSP_PATH": {
+                                "value": "live"
+                            }
+                        },
+                        "status": "running",
+                        "restartPolicy": "always"
+                    },
+                    "captureModule": {
+                        "settings": {
+                            "image": "yourcontainerregistry/capturemodule:version",
+                            "createOptions": ""
+                        },
+                        "type": "docker",
+                        "version": "1.0",
+                        "env": {
+                            "STORAGE_CONTAINER": {
+                                "value": "storage_container_name"
+                            },
+                            "RTSP_IP": {
+                                "value": "192.168.31.247 //provide stream IP adress"
+                            },
+                            "RTSP_PORT": {
+                                "value": "8900"
+                            },
+                            "RTSP_PATH": {
+                                "value": "live"
+                            },
+                            "AZURE_STORAGE_CONNECTION_STRING": {
+                                "value": "your_storage_connection_string"
+                            }
+                        },
+                        "status": "running",
+                        "restartPolicy": "always"
+                    },
+                    "ASAEdgeFilter": {
+                        "settings": {
+                            "image": "mcr.microsoft.com/azure-stream-analytics/azureiotedge:1.0.3",
+                            "createOptions": ""
+                        },
+                        "type": "docker",
+                        "version": "1.0",
+                        "env": {
+                            "PlanId": {
+                                "value": "stream-analytics-on-iot-edge"
+                            }
+                        },
+                        "status": "running",
+                        "restartPolicy": "always"
+                    }
+                },
+                "runtime": {
+                    "settings": {
+                        "minDockerVersion": "v1.25",
+                        "registryCredentials": {
+                            "your_rregistry_name": {
+                                "address": "",
+                                "password": "",
+                                "username": ""
+                            }
+                        }
+                    },
+                    "type": "docker"
+                },
+                "schemaVersion": "1.0",
+                "systemModules": {
+                    "edgeAgent": {
+                        "settings": {
+                            "image": "mcr.microsoft.com/azureiotedge-agent:1.0.7.1",
+                            "createOptions": "{\"HostConfig\":{\"Binds\":[\"/data/storage/edgeAgent:/tmp/edgeAgent/\"]}}"
+                        },
+                        "type": "docker",
+                        "env": {
+                            "BackupConfigFilePath": {
+                                "value": "/tmp/edgeAgent/backup.json"
+                            }
+                        }
+                    },
+                    "edgeHub": {
+                        "settings": {
+                            "image": "mcr.microsoft.com/azureiotedge-hub:1.0",
+                            "createOptions": "{\"HostConfig\":{\"Binds\":[\"/data/storage/edgeHub:/tmp/edgeHub/\"],\"PortBindings\":{\"443/tcp\":[{\"HostPort\":\"443\"}],\"5671/tcp\":[{\"HostPort\":\"5671\"}],\"8883/tcp\":[{\"HostPort\":\"8883\"}]}}}"
+                        },
+                        "type": "docker",
+                        "env": {
+                            "OptimizeForPerformance": {
+                                "value": "False"
+                            },
+                            "mqttSettings__ThreadCount": {
+                                "value": "4"
+                            }
+                        },
+                        "status": "running",
+                        "restartPolicy": "always"
+                    }
+                }
+            }
+        },
+        "$edgeHub": {
+            "properties.desired": {
+                "routes": {
+                    "VisionSampleModuleToASA": "FROM /messages/modules/AIVisionDevKitGetStartedModule/outputs/* INTO BrokeredEndpoint(\"/modules/ASAEdgeFilter/inputs/Input\")",
+                    "VisionToCaptureModule": "FROM /messages/modules/ASAEdgeFilter/outputs/* INTO BrokeredEndpoint(\"/modules/captureModule/inputs/input1\")",
+                    "ASAToIoTHub": "FROM /messages/modules/ASAEdgeFilter/outputs/* INTO $upstream"
+                },
+                "schemaVersion": "1.0",
+                "storeAndForwardConfiguration": {
+                    "timeToLiveSecs": 7200
+                }
+            }
+        },
+        "AIVisionDevKitGetStartedModule": {
+            "properties.desired": {
+                "ModelZipUrl": "",
+                "TimeBetweenMessagesInSeconds": 12,
+                "ObjectsOfInterest": "",
+                "ShowVideoOverlay": "true",
+                "Bitrate": "1.5Mbps",
+                "Resolution": "1080P",
+                "VideoOverlayConfig": "inference",
+                "FrameRate": 30,
+                "HdmiDisplayActive": "true",
+                "VideoAnalyticsEnabled": "true",
+                "ShowVideoPreview": "true",
+                "Codec": "AVC/H.264"
+            }
+        },
+        "WebStreamModule": {
+            "properties.desired": {}
+        },
+        "captureModule": {
+            "properties.desired": {}
+        },
+        "ASAEdgeFilter": {
+            "properties.desired": {
+                "ASAJobInfo": "",
+                "ASAJobResourceId": "",
+                "ASAJobEtag": "",
+                "PublishTimestamp": ""
+            }
+        }
+    }
+}

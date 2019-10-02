@@ -1,0 +1,15 @@
+{
+  "EdgeInputReferenceDataInfo": null,
+  "EdgeIoTGatewayMessageBusInfo": {},
+  "Name": "Input",
+  "Type": "Data Stream",
+  "DataSourceType": "Edge Hub",
+  "Serialization": {
+    "Encoding": "UTF8",
+    "Type": "Json",
+    "FieldDelimiter": null,
+    "Format": null
+  },
+  "CompresssionType": "None",
+  "ScriptType": "Input"
+}

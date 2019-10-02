@@ -4,3 +4,5 @@ bin
 appsettings.Development.json
 appsettings.json
 local.settings.json
+Dispatch
+ASALocalRun
