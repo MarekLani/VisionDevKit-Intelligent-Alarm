@@ -1,6 +1,6 @@
 # Vision AI DevKit Intelligent Alarm
 
-Vision AI DevKit Intelligent Alarm is twist or update if you will to already existing [Intelligent Alarm Solution](https://github.com/MarekLani/IoTIntelligentAlarm). What makes it intelligent alarm? For starters, just briefly, this solution is capable to detect faces, recognize entrants, provide information about past entries and raise alert or notification in case of arrival of unknown entrant. 
+Vision AI DevKit Intelligent Alarm is twist or update if you will to already existing [Intelligent Alarm Solution](https://github.com/MarekLani/IoTIntelligentAlarm). What makes it intelligent alarm? For starters, just briefly, this solution is capable to detect persons, recognize entrants, provide information about past entries and raise alert or notification in case of arrival of unknown entrant. 
 
 While first version of Intelligent Alarm was heavily dependent on usage of IoT Sensors, you will find none of those in this new version. As the name of the solution says, it  uses [Vision AI DevKit]() device, capable to run Azure Custom Vision Model and recognize various objects, what allowed for getting rid off sensors used in previous version and enabled much wider set of scenarios as whole person detection logic happens only using video stream analysis.
 
