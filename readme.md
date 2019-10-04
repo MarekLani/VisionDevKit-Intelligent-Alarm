@@ -6,7 +6,7 @@ While first version of Intelligent Alarm was heavily dependent on usage of IoT S
 
 Note that this is a non production pet project, that helped me explore various Azure Services. Nevertheless I believe you might find some pieces of it interesting and usable in your own project, or you might just replicate the solution and this way get yourself familiar with various Azure Services and Vision AI DevKit as well. If you are interested in more details, keep on reading, we will walk thru the key parts of the solution.  Familiarity with basic concepts behind Azure Services used within this project is recommended. At the end of the article I provide documentation links for services used within this solution, which you may use to ramp up.
 
-In this text I will discuss how I used Vision Dev Kit to capture and upload images to Azure in case person is detected. Further you will find details on how the processor function processes captured image, invokes Face API and notifies user about the new entry, while in the last part you will find details on  presentation layer of this solution built as chat bot using Bot Framework. Notice: Expect Node.js on Vision AI Dev Kit side and C# everywhere else. 
+In this text I will discuss how I used Vision Dev Kit to capture and upload images to Azure in case person is detected. Further you will find details on how Azure function processes captured image, invokes Face API and notifies user about the new entry, while in the last part I will mention details about presentation layer of this solution built as chat bot using Bot Framework. Notice: Expect Node.js on Vision AI Dev Kit side and C# everywhere else. 
 
 ## Solution Architecture
 
