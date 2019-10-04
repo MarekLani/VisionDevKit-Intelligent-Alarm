@@ -5,7 +5,6 @@ namespace VisionAlarmBot
 {
     public interface IBotServices
     {
-        LuisRecognizer Dispatch { get; }
-        QnAMaker SampleQnA { get; }
+        LuisRecognizer LuisRecognizer { get; }
     }
 }

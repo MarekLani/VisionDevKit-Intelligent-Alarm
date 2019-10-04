@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -14,12 +13,12 @@ namespace CaptureProcessor
     {
         [FunctionName("LastEntry")]
         public IActionResult Run(
-           [HttpTrigger(AuthorizationLevel.Function, "get", Route = "LastEntry")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "LastEntry")] HttpRequest req,
             [CosmosDB("%CosmosDB%", "%CosmosCollection%",
                 ConnectionStringSetting = "CosmosDBConnection",
                 SqlQuery = "SELECT TOP 1 *  FROM c ORDER BY c.Timestamp DESC")]
                 IEnumerable<Entry> entries,
-           ILogger log)
+            ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a GetLastEntry request.");
 
@@ -30,12 +29,12 @@ namespace CaptureProcessor
 
         [FunctionName("GetLastEntryForName")]
         public IActionResult GetLastEntryForName(
-           [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetLastEntryForName/{name}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "GetLastEntryForName/{name}")] HttpRequest req,
             [CosmosDB("%CosmosDB%", "%CosmosCollection%",
                 ConnectionStringSetting = "CosmosDBConnection",
-                SqlQuery = "SELECT VALUE c FROM c JOIN s in c.Entrants WHERE CONTAINS(s, {name}) ORDER BY c.Timestamp DESC")]
+                SqlQuery = "SELECT VALUE c FROM c JOIN e in c.Entrants WHERE CONTAINS(e, {name}) ORDER BY c.Timestamp DESC")]
                 IEnumerable<Entry> entries,
-           ILogger log)
+            ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a GetLastEntryForName request.");
 
@@ -46,12 +45,12 @@ namespace CaptureProcessor
 
         [FunctionName("LastKnownEntrant")]
         public IActionResult LastKnownEntrant(
-         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "LastKnownEntrant")] HttpRequest req,
-          [CosmosDB("%CosmosDB%", "%CosmosCollection%",
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "LastKnownEntrant")] HttpRequest req,
+            [CosmosDB("%CosmosDB%", "%CosmosCollection%",
                 ConnectionStringSetting = "CosmosDBConnection",
                 SqlQuery = "SELECT TOP 1 *  FROM c WHERE c.Entrants != '' ORDER BY c.Timestamp DESC")]
                 IEnumerable<Entry> entries,
-         ILogger log)
+            ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a LastKnownEntrant request.");
 
@@ -63,7 +62,7 @@ namespace CaptureProcessor
         [FunctionName("EntrantsOnDay")]
         public IActionResult EntrantsOnDay(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "EntrantsOnDay/{date}")] HttpRequest req,
-         [CosmosDB("%CosmosDB%", "%CosmosCollection%",
+            [CosmosDB("%CosmosDB%", "%CosmosCollection%",
                 ConnectionStringSetting = "CosmosDBConnection",
                 SqlQuery = "SELECT *  FROM c WHERE c.Entrants != '' AND c.Timestamp > {date}")]
                 IEnumerable<Entry> entries,

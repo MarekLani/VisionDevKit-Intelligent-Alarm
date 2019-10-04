@@ -38,7 +38,7 @@ namespace CaptureProcessor
             ILogger log)
         {
                         
-            //We need to obtain linux timestam from image name
+            //We need to obtain linux timestamp from image name
             //(8 chars "capture_" prefix, 12 = prefix + ."jpg" suffix)
             var timeStampString = name.Substring(8, name.Length - 12);
             var dto = DateTimeOffset.FromUnixTimeMilliseconds(Convert.ToInt64(timeStampString));
@@ -85,7 +85,7 @@ namespace CaptureProcessor
                     });
                 }
 
-                //Invoking Bot Proactive message by sending request to proactive endpoint 
+                //Invoking Bot Proactive message by sending request to notify endpoint 
                 var content = new StringContent($"{{\"imageName\":\"{name}\",\"text\":\"{String.Join(", ", entrants.ToArray())}\"}}", Encoding.UTF8, "application/json");
                 await _httpClient.PostAsync(Environment.GetEnvironmentVariable("ProactiveBotEndpoint"),content);
 

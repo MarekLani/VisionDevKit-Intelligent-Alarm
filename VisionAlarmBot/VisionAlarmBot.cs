@@ -5,7 +5,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,18 +44,15 @@ namespace VisionAlarmBot
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             // First, we use the dispatch model to determine which cognitive service (LUIS or QnA) to use.
-            var recognizerResult = await _botServices.Dispatch.RecognizeAsync(turnContext, cancellationToken);
-
-            // Top intent tell us which cognitive service to use.
-            var topIntent = recognizerResult.GetTopScoringIntent();
+            var recognizerResult = await _botServices.LuisRecognizer.RecognizeAsync(turnContext, cancellationToken);
 
             // Next, we call the dispatcher with the top intent.
-            await DispatchToTopIntentAsync(turnContext, topIntent.intent, recognizerResult, cancellationToken);
+            await ProcessAlarmAsync(turnContext, recognizerResult, cancellationToken);
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
-            const string WelcomeText = "Type your question or alarm intent. I can help you answer question related to MS products or show entries captured by vision dev kit";
+            const string WelcomeText = "I am inteligent alarm bot and I can show you Last entry, I can tell you when specific person arrived, who was lat identified person to enter and who entered today.";
 
             foreach (var member in membersAdded)
             {
@@ -67,32 +63,13 @@ namespace VisionAlarmBot
             }
         }
 
-        private async Task DispatchToTopIntentAsync(ITurnContext<IMessageActivity> turnContext, string intent, RecognizerResult recognizerResult, CancellationToken cancellationToken)
-        {
-            switch (intent)
-            {
-                case "l_IntelligenAlarmBot":
-                    await ProcessAlarmAsync(turnContext, recognizerResult.Properties["luisResult"] as LuisResult, cancellationToken);
-                    break;
-                case "q_faq":
-                    await ProcessSampleQnAAsync(turnContext, cancellationToken);
-                    break;
-                default:
-                    _logger.LogInformation($"Dispatch unrecognized intent: {intent}.");
-                    await turnContext.SendActivityAsync(MessageFactory.Text($"Dispatch unrecognized intent: {intent}."), cancellationToken);
-                    break;
-            }
-        }
-
-        private async Task ProcessAlarmAsync(ITurnContext<IMessageActivity> turnContext, LuisResult luisResult, CancellationToken cancellationToken)
+        private async Task ProcessAlarmAsync(ITurnContext<IMessageActivity> turnContext, RecognizerResult result, CancellationToken cancellationToken)
         {
             _logger.LogInformation("ProcessLAlarmAsync");
 
             var client = _clientFactory.CreateClient("visionBackend");
 
-            // Retrieve LUIS result for Process Automation.
-            var result = luisResult.ConnectedServiceResult;
-            var topIntent = result.TopScoringIntent.Intent;
+            var topIntent = result.GetTopScoringIntent().intent;
 
             TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
 
@@ -108,8 +85,9 @@ namespace VisionAlarmBot
                     await DisplayEntry(turnContext, entry2.ImageName, "Last know entrant(s)", "Last known entrants were: " + textInfo.ToTitleCase(String.Join(", ", entry2.Entrants.ToArray())), entry2.Timestamp, cancellationToken);
                     break;
                 case "PersonArrived":
-                    var entry3 = JsonConvert.DeserializeObject<Entry>(await client.GetStringAsync("GetLastEntryForName/" + result.Entities[0].Entity));
-                    await DisplayEntry(turnContext, entry3.ImageName, textInfo.ToTitleCase(result.Entities[0].Entity) + " entered at", " ", entry3.Timestamp, cancellationToken);
+                    var name = result.Entities["Person"][0].ToString();
+                    var entry3 = JsonConvert.DeserializeObject<Entry>(await client.GetStringAsync("GetLastEntryForName/" + name));
+                    await DisplayEntry(turnContext, entry3.ImageName, textInfo.ToTitleCase(name) + " entered at", " ", entry3.Timestamp, cancellationToken);
                     break;
                 case "ShowMeTodaysEntrants":
                     var todaysEntrants = JsonConvert.DeserializeObject<string[]>(await client.GetStringAsync("EntrantsOnDay/" + DateTime.Now.Date.ToString("s")));
@@ -120,21 +98,9 @@ namespace VisionAlarmBot
                     }
                     await turnContext.SendActivityAsync("People who entered today:" + textInfo.ToTitleCase(namesList));
                     break;
-            }
-        }
-
-        private async Task ProcessSampleQnAAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("ProcessSampleQnAAsync");
-
-            var results = await _botServices.SampleQnA.GetAnswersAsync(turnContext);
-            if (results.Any())
-            {
-                await turnContext.SendActivityAsync(MessageFactory.Text(results.First().Answer), cancellationToken);
-            }
-            else
-            {
-                await turnContext.SendActivityAsync(MessageFactory.Text("Sorry, could not find an answer in the Q and A system."), cancellationToken);
+                default:
+                    await turnContext.SendActivityAsync("Sorry your intent was not recognized");
+                    break;
             }
         }
 
